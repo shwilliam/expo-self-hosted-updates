@@ -2,15 +2,19 @@
   "main": "index.js",
   "scripts": {
     "android": "react-native run-android",
+    "android:release": "react-native run-android --configuration Release",
     "ios": "react-native run-ios",
+    "ios:release": "react-native run-ios --configuration Release",
     "web": "expo start --web",
     "start": "react-native start",
+    "update": "yarn export && dotenv -- cross-var \"aws s3 sync ./dist s3://%S3_BUCKET% --delete --acl public-read\"",
+    "export": "dotenv -- cross-var expo export --public-url %BUNDLE_URL% --force",
     "test": "jest"
   },
   "dependencies": {
     "expo": "~40.0.0",
-    "expo-updates": "~0.4.0",
     "expo-splash-screen": "~0.8.0",
+    "expo-updates": "~0.4.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "~0.63.4",
@@ -26,6 +30,8 @@
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "~0.63.2",
     "babel-preset-expo": "~8.3.0",
+    "cross-var": "^1.1.0",
+    "dotenv-cli": "^4.0.0",
     "jest-expo": "~40.0.0",
     "typescript": "~4.0.0"
   },
