@@ -1,0 +1,12 @@
+{
+  "name": "ExpoSelfHostedUpdates",
+  "displayName": "ExpoSelfHostedUpdates",
+  "expo": {
+    "name": "ExpoSelfHostedUpdates",
+    "slug": "ExpoSelfHostedUpdates",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
