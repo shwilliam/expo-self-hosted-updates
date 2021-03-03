@@ -2,32 +2,46 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import * as Updates from "expo-updates";
 
+enum UpdateStatus {
+  Checking = "checking",
+  Pending = "pending",
+  Fetching = "fetching",
+  Standby = "standby",
+}
+
 export default function App() {
-  const [updateStatus, setUpdateStatus] = useState<
-      "CHECKING" | "PENDING" | "FETCHING" | "STANDBY"
-    >("STANDBY"),
+  const [updateStatus, setUpdateStatus] = useState<UpdateStatus>(
+      UpdateStatus.Standby
+    ),
+    updateVersion = Updates.manifest?.version ?? "unknown",
+    // TODO: run on app open/focus
+    // TODO: don't run if dev env
     checkForUpdates = async () => {
-      setUpdateStatus("CHECKING");
-      const update = await Updates.checkForUpdateAsync();
-      if (update.isAvailable) {
-        setUpdateStatus("FETCHING");
-        await Updates.fetchUpdateAsync();
-        setUpdateStatus("PENDING");
-      } else setUpdateStatus("STANDBY");
+      setUpdateStatus(UpdateStatus.Checking);
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          setUpdateStatus(UpdateStatus.Fetching);
+          await Updates.fetchUpdateAsync();
+          setUpdateStatus(UpdateStatus.Pending);
+        } else setUpdateStatus(UpdateStatus.Standby);
+      } catch (error) {
+        setUpdateStatus(UpdateStatus.Standby);
+      }
     };
 
   return (
     <View style={styles.container}>
-      <Text>{Updates.manifest?.version ?? "unknown version"}</Text>
-      {updateStatus === "STANDBY" ? (
+      <Text>{updateVersion}</Text>
+      {updateStatus === UpdateStatus.Standby ? (
         <Button title="Check for Update" onPress={checkForUpdates} />
-      ) : updateStatus === "PENDING" ? (
+      ) : updateStatus === UpdateStatus.Pending ? (
         <Button title="Update now" onPress={() => Updates.reloadAsync()} />
       ) : (
         <Text>
-          {updateStatus === "CHECKING"
+          {updateStatus === UpdateStatus.Checking
             ? "Checking for update..."
-            : updateStatus === "FETCHING"
+            : updateStatus === UpdateStatus.Fetching
             ? "Downloading update..."
             : null}
         </Text>

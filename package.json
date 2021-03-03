@@ -1,14 +1,16 @@
 {
   "main": "index.js",
   "scripts": {
+    "start": "react-native start",
     "android": "react-native run-android",
     "android:release": "react-native run-android --variant release",
     "ios": "react-native run-ios",
     "ios:release": "react-native run-ios --configuration Release",
     "web": "expo start --web",
-    "start": "react-native start",
-    "update": "yarn export && dotenv -- cross-var \"aws s3 sync ./dist s3://%S3_BUCKET% --delete --acl public-read\"",
-    "export": "dotenv -- cross-var expo export --public-url %BUNDLE_URL% --force",
+    "ota": "yarn ota:export && yarn ota:sync",
+    "ota:init": "yarn ota:export",
+    "ota:sync": "dotenv -- cross-var \"aws s3 sync ./dist s3://%S3_BUCKET%/%MAJOR_VERSION% --delete --acl public-read\"",
+    "ota:export": "dotenv -- cross-var expo export --public-url %BUNDLE_URL%%MAJOR_VERSION%/ --force",
     "test": "jest"
   },
   "dependencies": {

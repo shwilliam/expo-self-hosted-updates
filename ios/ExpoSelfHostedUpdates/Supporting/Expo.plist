@@ -11,6 +11,6 @@
 	<key>EXUpdatesSDKVersion</key>
 	<string>40.0.0</string>
 	<key>EXUpdatesURL</key>
-	<string>https://expo-bundles.s3.amazonaws.com/ios-index.json</string>
+	<string>https://my-bucket.s3.amazonaws.com/1/ios-index.json</string>
 </dict>
 </plist>
